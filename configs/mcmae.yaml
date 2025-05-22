@@ -1,0 +1,58 @@
+training:
+  seed: 7
+  saveckp_freq: 20
+  num_workers: 1
+  batch_size_per_gpu: 32
+  warmup_epochs: 40
+  lr: 1.5e-4
+  min_lr: 1.0e-6
+  epochs: 400
+  weight_decay: 0.05
+  weight_decay_end: 0.5
+
+model:
+  pretrain_model_path: "/path/to/convmae_base.pth"
+  use_lora: True
+  lora_config:
+    target_modules: ["decoder_embed", "fc1", "qkv", "fc2", "proj", "decoder_pred", "patch_embed4"]
+    lora_low_rank: 8
+    lora_alpha: 32
+    lora_dropout: 0.1
+
+loss:
+  cross_modality_loss: "attention_simi_guided_loss"
+  rgb_distillation_loss: "attention_simi_guided_loss" #"RGB_patch_simi_loss"
+  ir_alpha: 1
+  rgb_beta: 1
+  atten_map_threshold: 0.6
+  temperature: 0.04
+  ir_info: False
+
+dataset:
+  path: 
+    - "/path/to/MVIP/FLIR-ALIGN"
+    - "/path/to/MVIP/KAIST_MMSEG"
+    - "/path/to/MVIP/LasHeR0428_rename"
+    - "/path/to/MVIP/LLVIP"
+    - "/path/to/MVIP/VisDrone"
+  mean_RGB: 
+    !!python/tuple
+    - 0.485
+    - 0.456
+    - 0.406
+  std_RGB:
+    !!python/tuple
+    - 0.229
+    - 0.224
+    - 0.225
+  mean_IR: 
+    !!python/tuple
+    - 0.5338
+    - 0.5338
+    - 0.5338
+  std_IR: 
+    !!python/tuple
+    - 0.2519
+    - 0.2519
+    - 0.2519
+        
